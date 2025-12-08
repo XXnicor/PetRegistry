@@ -1,136 +1,144 @@
-# PetRegistry API
+# PetRegistry
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-green)
-![JPA/Hibernate](https://img.shields.io/badge/JPA-Hibernate-orange)
-![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)
 ![Maven](https://img.shields.io/badge/Build-Maven-red)
 
-API RESTful para gerenciamento de animais em uma ONG de proteção, permitindo o controle de cadastros, status, lares temporários e histórico de eventos.
+API REST para gerenciamento de pets em ONGs de proteção animal.
 
-## 🛠️ Tecnologias e Práticas
+## Sobre
 
-**Stack:**
-- Java 17, Spring Boot 3
-- Spring Data JPA, Hibernate
-- PostgreSQL (produção), H2 (desenvolvimento)
-- Maven, JUnit 5, Mockito
+Começou como um desafio técnico do canal DevMagro (focado em fundamentos Java) e evoluiu para uma solução voltada para ONGs que precisam gerenciar animais resgatados.
 
-**Arquitetura:**
-- Separação em camadas (Controller/Service/Repository/Model)
-- DTOs para requisições e respostas
-- Relacionamentos JPA com objetos
-- Transações gerenciadas com @Transactional
-- Testes unitários com mocks
+## Funcionalidades
 
-## ▶️ Como Executar
+- CRUD completo de Pets
+- Controle de status (Disponível, Adotado, Em Tratamento, etc.)
+- Gerenciamento de Lares Temporários
+- Cadastro de Adotantes
+- Histórico de eventos por pet
+- Interface web básica para visualização
 
-**Pré-requisitos:**
-- Java 17+
-- Maven 3.8+
+## Tecnologias
+
+**Backend:**
+- Java 17
+- Spring Boot 3.2.5
+- Spring Data JPA + Hibernate
+- Maven
+
+**Banco de Dados:**
+- H2 (desenvolvimento)
+- PostgreSQL (produção)
+
+**Frontend:**
+- HTML/CSS/JavaScript
+- Bootstrap 5
+
+## Como Executar
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/ProjeoPets.git
-cd ProjeoPets
+git clone https://github.com/XXnicor/PetRegistry.git
+cd PetRegistry
 
-# Compile
-mvn clean package
-
-# Execute
-java -jar target/PetRegistry-1.0-SNAPSHOT.jar
+# Compile e execute
+mvn clean compile
+mvn spring-boot:run -DskipTests
 ```
 
-A API estará disponível em `http://localhost:8080`.
+Acesse:
+- Frontend: http://localhost:9090
+- API: http://localhost:9090/api/pets
+- H2 Console: http://localhost:9090/h2-console (user: sa, password: password)
 
-## 🔌 Principais Endpoints
+## Principais Endpoints
 
-### Pets
-- `GET /pets` - Lista todos os pets (paginação)
-- `GET /pets/{id}` - Busca pet por ID
-- `POST /pets` - Cadastra novo pet
-- `PUT /pets/{id}` - Atualiza pet
-- `DELETE /pets/{id}` - Remove pet
+```
+GET    /api/pets                    Lista todos os pets
+GET    /api/pets/{id}               Busca por ID
+GET    /api/pets/status/{status}    Filtra por status
+POST   /api/pets                    Cadastra pet
+PUT    /api/pets/{id}               Atualiza pet
+DELETE /api/pets/{id}               Remove pet
+```
 
-### Lares Temporários
-- `GET /lares-temporarios` - Lista lares
-- `POST /lares-temporarios` - Cadastra lar
-
-### Adotantes
-- `GET /adotantes` - Lista adotantes
-- `POST /adotantes` - Cadastra adotante
-
-## 📝 Exemplo de Requisição
+## Exemplo de Cadastro
 
 ```json
-POST /pets
+POST /api/pets
 {
   "nome": "Rex",
   "petType": "CACHORRO",
-  "idade": 3,
+  "sexType": "MACHO",
+  "portePet": "MEDIO",
   "statusPet": "DISPONIVEL_ADOCAO",
-  "descricao": "Cachorro dócil",
+  "idade": 3,
   "castrado": true,
-  "vacinado": true
+  "vacinado": true,
+  "entradaPet": "2025-12-08"
 }
 ```
 
-## 🏗️ Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
-src/
-├── main/
-│   ├── java/br/com/PetRegistry/
-│   │   ├── controller/     # Controllers REST
-│   │   ├── service/        # Lógica de negócio
-│   │   ├── repository/     # Acesso a dados
-│   │   ├── model/          # Entidades JPA
-│   │   └── DTORequests/    # DTOs
-│   └── resources/
-│       ├── application.properties
-│       └── static/         # Frontend simples
-└── test/                   # Testes unitários
+src/main/java/br/com/PetRegistry/
+├── controller/     # Controllers REST
+├── service/        # Lógica de negócio
+├── repository/     # Acesso a dados
+├── model/          # Entidades
+└── DTORequests/    # DTOs
 ```
 
-## 🧪 Testes
+## Testes
 
 ```bash
-# Executar todos os testes
 mvn test
-
-# Executar testes de um serviço específico
-mvn test -Dtest=PetServiceTest
 ```
 
-## 📚 Funcionalidades
+Implementados:
+- Testes de serviço (cadastro, atualização)
+- Testes de conversão (DTOs)
+- Testes de validação
 
-- ✅ CRUD completo de Pets
-- ✅ CRUD de Lares Temporários
-- ✅ CRUD de Adotantes
-- ✅ Controle de status (Disponível, Adotado, Em Tratamento)
-- ✅ Histórico de eventos por pet
-- ✅ Relacionamento entre Pet e Lar Temporário
-- ✅ Validações de dados com Bean Validation
+## Configuração para Produção
 
-## 🔧 Configuração do Banco
+Edite `application-prod.properties`:
 
-### Desenvolvimento (H2)
-Por padrão, usa banco H2 em memória. Sem configuração necessária.
-
-### Produção (PostgreSQL)
-Configure em `application-prod.properties`:
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/petregistry
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
 ```
 
-Execute com:
+Execute:
 ```bash
 java -jar target/PetRegistry-1.0-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
+## Aprendizados
+
+- Arquitetura em camadas
+- Relacionamentos JPA
+- Validações com Bean Validation
+- Integração frontend-backend
+- CORS para APIs REST
+
+## Roadmap
+
+- [ ] Autenticação JWT
+- [ ] Upload de imagens
+- [ ] Paginação avançada
+- [ ] Documentação Swagger
+
+## Contato
+
+Nicolas Eduardo  
+Email: nicoedu123@gmail.com  
+GitHub: [@XXnicor](https://github.com/XXnicor)
+
 ---
 
-*Desenvolvido por Nicolas*
+Projeto desenvolvido a partir do desafio do DevMagro, aplicando conceitos de Spring Boot e boas práticas de desenvolvimento.
 

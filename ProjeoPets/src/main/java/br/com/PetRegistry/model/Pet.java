@@ -23,9 +23,6 @@ public class Pet {
     @Embedded
     private PetProfile profile;
 
-    /**
-     * Construtor para uso do JPA.
-     */
     protected Pet() {
     }
 
@@ -35,12 +32,11 @@ public class Pet {
         this.larTemporario = larTemporario;
     }
 
-    // Getters
+
     public Long getId() {
         return id;
     }
 
-    // Método protegido para o repositório definir o ID após salvar
     public void setId(Long id) {
         this.id = id;
     }

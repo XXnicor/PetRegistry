@@ -23,7 +23,6 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
 
     @Override
     public LarTemporario saveLarTemporario(LarTemporario larTemporario) {
-        // Observação: São 5 colunas, portanto 5 placeholders na cláusula VALUES
         String sql="INSERT INTO larTemporario(nomeResponsavel,contato, enderecoCompleto,capacidadeMaxima,semVagas)"+
                 " VALUES (?,?,?,?,?)";
 

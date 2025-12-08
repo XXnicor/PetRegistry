@@ -32,14 +32,10 @@ public class LarTemporarioService {
     }
 
     public LarTemporario cadastrarLar(LarTemporarioRequestDTO dto) {
-        // A validação de capacidade > 0 já está no DTO com @Min(1),
-        // mas é bom manter uma validação na camada de serviço também.
         if (dto.getCapacidadeMaxima() <= 0) {
             throw new RegrasDeNegocioExceptions("A capacidade máxima deve ser maior que zero");
         }
 
-        // Converte o DTO para a entidade Model
-        // O ID é nulo (ou 0) pois será gerado pelo banco, e semVagas começa como false.
         LarTemporario larTemporario = new LarTemporario(0, dto.getNomeResponsavel(), dto.getContato(),
                 dto.getEnderecoCompleto(), dto.getCapacidadeMaxima(), false);
 
@@ -81,15 +77,15 @@ public class LarTemporarioService {
     }
 
     public LarTemporario atualizarLar(long id, LarTemporarioUpdateDTO dto) {
-        // Busca o lar existente ou lança uma exceção
+
         LarTemporario larExistente = lartemporarioRepository.findLarTemporarioById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Lar temporário não encontrado com ID: " + id));
 
-        // Atualiza os campos do objeto existente com os dados do DTO
+
         larExistente.setNomeResponsavel(dto.getNomeResponsavel());
         larExistente.setContato(dto.getContato());
         larExistente.setEnderecoCompleto(dto.getEnderecoCompleto());
-        // A capacidade e o status de vagas também poderiam ser atualizados aqui
+
 
         return lartemporarioRepository.updateLarTemporario(larExistente);
     }

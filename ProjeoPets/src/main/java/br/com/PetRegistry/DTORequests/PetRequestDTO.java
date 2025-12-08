@@ -17,10 +17,8 @@ public class PetRequestDTO {
     @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
     private final String nome;
 
-    // URL da foto do pet (campo do formulário HTML)
     private final String fotoUrl;
 
-    // Campos opcionais - não coletados no formulário básico
     private final String especie;
 
     private final String raca;
@@ -33,10 +31,7 @@ public class PetRequestDTO {
     @Size(max = 500, message = "A descrição deve ter no máximo 500 caracteres")
     private final String descricao;
 
-    // Histórico de saúde opcional
     private final String historicoSaude;
-
-    // Campos de saúde coletados no formulário HTML
     private final boolean castrado;
     private final boolean vacinado;
 

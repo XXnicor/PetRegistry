@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/pets")
+@RequestMapping("/api/pets")
+@CrossOrigin(origins = "*")
 public class PetController {
 
     private final PetService petService;
@@ -28,8 +28,6 @@ public class PetController {
         this.petService = petService;
         this.petMapper = petMapper;
     }
-
-    // Exemplo de como ficaria com Spring Web
     @PostMapping
     public ResponseEntity<PetResponseDTO> cadastrarPet(@Valid @RequestBody PetRequestDTO dto , UriComponentsBuilder uriBuilder) {
         Pet novoPet = petService.cadastrarPet(dto);
@@ -44,6 +42,25 @@ public class PetController {
                 .map(ResponseEntity::ok)
                 .orElse( ResponseEntity.notFound().build());
     }
+
+    @GetMapping
+    public ResponseEntity<List<PetResponseDTO>> listarTodos() {
+        List<Pet> pets = petService.findAllPaged(0, 100);
+        List<PetResponseDTO> responseList = pets.stream()
+                .map(petMapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<PetResponseDTO>> listarPorStatus(@PathVariable String status) {
+        List<Pet> pets = petService.findPetByStatus(status);
+        List<PetResponseDTO> responseList = pets.stream()
+                .map(petMapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responseList);
+    }
+
     @GetMapping("/listar")
     public ResponseEntity<List<PetResponseDTO>> listarTodosOsPets(
             @RequestParam(required = false) String status,
@@ -69,7 +86,6 @@ public class PetController {
     @PutMapping("/{id}")
     public ResponseEntity<PetResponseDTO> atualizarPet(@PathVariable long id, @Valid @RequestBody PetUpdateDTO dto) {
         Pet petAtualizado = petService.atualizarPet(id, dto);
-        PetResponseDTO response = petMapper.toResponse(petAtualizado);
         return ResponseEntity.ok(petMapper.toResponse(petAtualizado));
     }
     @PutMapping("/{id}/status")

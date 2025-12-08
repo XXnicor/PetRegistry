@@ -108,7 +108,6 @@ public class PetService {
         if (!petRepository.existsById(petId)) {
             throw new RegrasDeNegocioExceptions("Pet não encontrado com id: " + petId);
         }
-        // Adicionar lógica para desassociar eventos ou outras entidades se necessário
         petRepository.deleteById(petId);
     }
 

@@ -18,12 +18,9 @@ public class AdotanteService {
     }
 
     public Adotante cadastrarAdotante(AdotanteRequestDTO dto) {
-        // Validações essenciais (MVP): garantir campos obrigatórios minimamente
         if (dto == null) {
             throw new RegrasDeNegocioExceptions("Dados do adotante são obrigatórios");
         }
-
-        // Converte o DTO para a entidade Model
         Adotante novoAdotante = new Adotante(
                 0, // ID será gerado pelo banco
                 dto.getNomeResponsavel(),
@@ -48,7 +45,6 @@ public class AdotanteService {
     public Adotante atualizarAdotante(long id, AdotanteUpdateDTO dto) {
         Adotante adotanteExistente = buscarAdotantePorId(id);
 
-        // Atualiza os dados
         adotanteExistente.setNomeCompleto(dto.getNomeResponsavel());
         adotanteExistente.setContato(dto.getContato());
         adotanteExistente.setEndereco(dto.getEnderecoCompleto());

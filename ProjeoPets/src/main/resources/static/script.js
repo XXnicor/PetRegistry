@@ -6,7 +6,7 @@
 // ====================================================================
 
 // Configuração da API (ajuste conforme seu servidor)
-const API_BASE_URL = 'http://localhost:8081/api';
+const API_BASE_URL = 'http://localhost:9090/api';
 
 // ================================================================
 // Autenticação básica para operações de escrita (Sprint 1 - Segurança)
