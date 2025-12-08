@@ -1,32 +1,43 @@
-# Compiled class files
-target/
+# Compilados
 *.class
+*.jar
+*.war
+*.ear
+target/
+out/
 
-# IDE
-.idea/
+# IntelliJ IDEA
 *.iml
-.vscode/
+.idea/
+*.iws
+*.ipr
 
-# Database
-*.db
-*.mv.db
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
 
 # Logs
 *.log
 
-# Maven
-.mvn/
+# Arquivos temporários
+*.tmp
+*.bak
+*.swp
+*~
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Arquivos de análise - NÃO VERSIONAR
-ANALISE_CODIGO_IA.md
-RELATORIO_FINAL.md
-humanizar_codigo.ps1
-backup_antes_humanizacao_*/
-
-# .idea já está staged, mas para futuros projetos
-../.idea/
+# Banco de dados local
+data/
+*.db
+*.mv.db
 

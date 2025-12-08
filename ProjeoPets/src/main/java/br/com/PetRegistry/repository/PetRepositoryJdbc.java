@@ -23,8 +23,8 @@ public class PetRepositoryJdbc implements PetRepository {
     @Override
     public Pet save(Pet pet) {
 
-        String sql = "INSERT INTO pet (nomeCompleto,fotoUrl,tipo,sexo,porte,status,idadeAproximada,dataEntrada,historicoMedico,observacoes," +
-                "castrado,vacinado,sociavelComCaes,sociavelComGatos,sociavelComCriancas,larTemporarioId)" +
+        String sql = "INSERT INTO pet (nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada,historico_medico,observacoes," +
+                "castrado,vacinado,sociavel_com_caes,sociavel_com_gatos,sociavel_com_criancas,lar_temporario_id)" +
                 " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = dataSource.getConnection();
@@ -46,8 +46,9 @@ public class PetRepositoryJdbc implements PetRepository {
             smt.setBoolean(14, pet.isSociavelComGatos());
             smt.setBoolean(15, pet.isSociavelComCriancas());
 
-            if (pet.getLarTemporarioId() != null) {
-                smt.setLong(16, pet.getLarTemporarioId());
+            Long larTemporarioId = pet.getLarTemporarioId();
+            if (larTemporarioId != null) {
+                smt.setLong(16, larTemporarioId);
             } else {
                 smt.setNull(16, Types.BIGINT);
             }
@@ -69,9 +70,9 @@ public class PetRepositoryJdbc implements PetRepository {
     @Override
     public Optional<Pet> findById(long id) {
 
-        String sql = "SELECT id,nomeCompleto,fotoUrl,tipo,sexo,porte,status,idadeAproximada,dataEntrada" +
-                ",historicoMedico,observacoes,castrado,vacinado,sociavelComCaes,sociavelComGatos," +
-                "sociavelComCriancas,larTemporarioId FROM pet WHERE id =?";
+        String sql = "SELECT id,nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada" +
+                ",historico_medico,observacoes,castrado,vacinado,sociavel_com_caes,sociavel_com_gatos," +
+                "sociavel_com_criancas,lar_temporario_id FROM pet WHERE id =?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)) {
@@ -91,9 +92,9 @@ public class PetRepositoryJdbc implements PetRepository {
 
     @Override
     public List<Pet> findByName(String nome) {
-        String sql = "SELECT id,nomeCompleto,fotoUrl,tipo,sexo,porte,status,idadeAproximada,dataEntrada" +
-                ",historicoMedico,observacoes,castrado,vacinado,sociavelComCaes,sociavelComGatos," +
-                "sociavelComCriancas,larTemporarioId FROM pet WHERE UPPER(nomeCompleto) LIKE UPPER(?) ORDER BY id";
+        String sql = "SELECT id,nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada" +
+                ",historico_medico,observacoes,castrado,vacinado,sociavel_com_caes,sociavel_com_gatos," +
+                "sociavel_com_criancas,lar_temporario_id FROM pet WHERE UPPER(nome_completo) LIKE UPPER(?) ORDER BY id";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)) {
@@ -114,8 +115,8 @@ public class PetRepositoryJdbc implements PetRepository {
 
     @Override
     public List<Pet> findAllPaged(int offset, int limit) {
-        String sql = "SELECT id,nomeCompleto,fotoUrl,tipo,sexo,porte,status,idadeAproximada,dataEntrada," +
-                "historicoMedico,observacoes,castrado,vacinado,sociavelComCaes,sociavelComGatos,sociavelComCriancas,larTemporarioId FROM pet " +
+        String sql = "SELECT id,nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada," +
+                "historico_medico,observacoes,castrado,vacinado,sociavel_com_caes,sociavel_com_gatos,sociavel_com_criancas,lar_temporario_id FROM pet " +
                 "ORDER BY id LIMIT ? OFFSET ?";
 
         try (Connection connection = dataSource.getConnection();
@@ -138,9 +139,9 @@ public class PetRepositoryJdbc implements PetRepository {
     @Override
     public List<Pet> findByStatus(String status) {
 
-        String sql = "SELECT id,nomeCompleto,fotoUrl,tipo,sexo,porte,status,idadeAproximada,dataEntrada" +
-                ",historicoMedico,observacoes,castrado,vacinado,sociavelComCaes,sociavelComGatos," +
-                "sociavelComCriancas,larTemporarioId FROM pet WHERE status =?";
+        String sql = "SELECT id,nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada" +
+                ",historico_medico,observacoes,castrado,vacinado,sociavel_com_caes,sociavel_com_gatos," +
+                "sociavel_com_criancas,lar_temporario_id FROM pet WHERE status =?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)) {
@@ -162,10 +163,10 @@ public class PetRepositoryJdbc implements PetRepository {
     @Override
     public Pet update(Pet pet) {
 
-        String sql = "UPDATE pet SET nomeCompleto = ?, fotoUrl = ?, tipo = ?, sexo = ?, porte = ?, status = ?," +
-                " idadeAproximada = ?, dataEntrada = ?, historicoMedico = ?, observacoes = ?," +
-                "castrado=?,vacinado=?,sociavelComCaes=?,sociavelComGatos=?,sociavelComCriancas=?," +
-                "larTemporarioId=? WHERE id = ?";
+        String sql = "UPDATE pet SET nome_completo = ?, foto_url = ?, tipo = ?, sexo = ?, porte = ?, status = ?," +
+                " idade_aproximada = ?, data_entrada = ?, historico_medico = ?, observacoes = ?," +
+                "castrado=?,vacinado=?,sociavel_com_caes=?,sociavel_com_gatos=?,sociavel_com_criancas=?," +
+                "lar_temporario_id=? WHERE id = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)) {
@@ -186,8 +187,9 @@ public class PetRepositoryJdbc implements PetRepository {
             smt.setBoolean(14, pet.isSociavelComGatos());
             smt.setBoolean(15, pet.isSociavelComCriancas());
 
-            if (pet.getLarTemporarioId() != null) {
-                smt.setLong(16, pet.getLarTemporarioId());
+            Long larTemporarioId = pet.getLarTemporarioId();
+            if (larTemporarioId != null) {
+                smt.setLong(16, larTemporarioId);
             } else {
                 smt.setNull(16, Types.BIGINT);
             }
@@ -231,8 +233,8 @@ public class PetRepositoryJdbc implements PetRepository {
     @Override
     public List<Pet> findAll() {
 
-        String sql= "SELECT id,nomeCompleto,fotoUrl,tipo,sexo,porte,status,idadeAproximada,dataEntrada," +
-                "historicoMedico,observacoes,castrado,vacinado,sociavelComCaes,sociavelComGatos,sociavelComCriancas,larTemporarioId FROM pet";
+        String sql= "SELECT id,nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada," +
+                "historico_medico,observacoes,castrado,vacinado,sociavel_com_caes,sociavel_com_gatos,sociavel_com_criancas,lar_temporario_id FROM pet";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)){
@@ -253,9 +255,9 @@ public class PetRepositoryJdbc implements PetRepository {
 
     @Override
     public List<Pet> findByProfileNomeCompletoContainingIgnoreCase(String nome) {
-        String sql = "SELECT id,nomeCompleto,fotoUrl,tipo,sexo,porte,status,idadeAproximada,dataEntrada," +
-                "historicoMedico,observacoes,castrado,vacinado,sociavelComCaes,sociavelComGatos,sociavelComCriancas,larTemporarioId " +
-                "FROM pet WHERE LOWER(nomeCompleto) LIKE LOWER(?)";
+        String sql = "SELECT id,nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada," +
+                "historico_medico,observacoes,castrado,vacinado,sociavel_com_caes,sociavel_com_gatos,sociavel_com_criancas,lar_temporario_id " +
+                "FROM pet WHERE LOWER(nome_completo) LIKE LOWER(?)";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)) {
@@ -302,26 +304,26 @@ public class PetRepositoryJdbc implements PetRepository {
     // Método auxiliar para mapear ResultSet para Pet
     private Pet mapResultSetToPet(ResultSet rs) throws SQLException {
         PetProfile profile = new PetProfile(
-                rs.getString("nomeCompleto"),
-                rs.getString("fotoUrl"),
+                rs.getString("nome_completo"),
+                rs.getString("foto_url"),
                 PetType.valueOf(rs.getString("tipo")),
                 SexType.valueOf(rs.getString("sexo")),
                 Porte.valueOf(rs.getString("porte")),
-                rs.getInt("idadeAproximada"),
-                rs.getDate("dataEntrada").toLocalDate(),
-                rs.getString("historicoMedico"),
+                rs.getInt("idade_aproximada"),
+                rs.getDate("data_entrada").toLocalDate(),
+                rs.getString("historico_medico"),
                 rs.getString("observacoes"),
                 rs.getBoolean("castrado"),
                 rs.getBoolean("vacinado"),
-                rs.getBoolean("sociavelComCaes"),
-                rs.getBoolean("sociavelComGatos"),
-                rs.getBoolean("sociavelComCriancas")
+                rs.getBoolean("sociavel_com_caes"),
+                rs.getBoolean("sociavel_com_gatos"),
+                rs.getBoolean("sociavel_com_criancas")
         );
 
         Pet pet = new Pet(
                 PetStatus.valueOf(rs.getString("status")),
                 profile,
-                null // LarTemporario será carregado separadamente se necessário
+                null // LarTemporario será carregado separado
         );
 
         pet.setId(rs.getLong("id"));
