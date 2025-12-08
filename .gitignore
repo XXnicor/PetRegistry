@@ -1,0 +1,14 @@
+# Ignorar configurações do IntelliJ IDEA da pasta pai
+.idea/
+*.iml
+
+# Ignorar outras pastas que não são o projeto PetRegistry
+Exercicios/
+ProjetoAlga/
+out/
+src/
+
+# Compilados
+*.class
+target/
+
