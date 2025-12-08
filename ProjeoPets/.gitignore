@@ -1,0 +1,32 @@
+# Compiled class files
+target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Database
+*.db
+*.mv.db
+
+# Logs
+*.log
+
+# Maven
+.mvn/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Arquivos de análise - NÃO VERSIONAR
+ANALISE_CODIGO_IA.md
+RELATORIO_FINAL.md
+humanizar_codigo.ps1
+backup_antes_humanizacao_*/
+
+# .idea já está staged, mas para futuros projetos
+../.idea/
+

@@ -1,0 +1,166 @@
+@startuml
+
+' ===================================
+' PACOTE: br.com.petregistry.model
+' ===================================
+package "br.com.petregistry.model" {
+
+    enum PetType {
+    CACHORRO, GATO, OUTRO }
+    enum SexType { MACHO, FEMEA }
+    enum Porte { PEQUENO, MEDIO, GRANDE }
+    enum PetStatus { DISPONIVEL_ADOCAO, EM_TRATAMENTO, EM_LAR_TEMPORARIO, RESERVADO, ADOTADO }
+
+    class Pet {
+        - id: Long
+        - nome: String
+        - fotoUrl: String
+        - tipo: PetType
+        - sexo: SexType
+        - porte: Porte
+        - status: PetStatus
+        - idadeAproximada: int
+        - dataEntrada: LocalDate
+        - historicoMedico: String
+        - observacoes: String
+        - castrado: boolean
+        - vacinado: boolean
+        - sociavelComCaes: boolean
+        - sociavelComGatos: boolean
+        - sociavelComCriancas: boolean
+    }
+
+    class LarTemporario {
+        - id: Long
+        - nomeResponsavel: String
+        - contato: String
+        - endereco: String
+        - capacidade: int
+    }
+
+    class Adotante {
+        - id: Long
+        - nomeCompleto: String
+        - cpf: String
+        - contato: String
+        - endereco: String
+        - dataAprovacao: LocalDate
+    }
+
+    class Evento {
+        - id: Long
+        - data: LocalDateTime
+        - tipo: String
+        - descricao: String
+    }
+}
+
+' ===================================
+' PACOTE: br.com.petregistry.repository (Contrato + Implementação JDBC)
+' ===================================
+package "br.com.petregistry.repository" {
+    interface PetRepository {
+        + save(pet: Pet): Pet
+        + findById(id: Long): Optional<Pet>
+        + findByStatus(status: PetStatus): List<Pet>
+        + update(pet: Pet): Pet
+        + findAll(): List<Pet>
+        + deleteById(id: Long): void
+    }
+    ' << Spring Data JDBC or JPA seria aqui, mas focaremos no JDBC puro >>
+    class PetRepositoryJdbcImpl implements PetRepository {
+        - connection: Connection // No Spring Boot, isso seria injetado ou gerenciado pelo DataSource
+        ' (Métodos implementados com SQL via JDBC)
+    }
+
+    interface LarTemporarioRepository {
+        + save(lt: LarTemporario): LarTemporario
+        + findById(id: Long): Optional<LarTemporario>
+        + findAll(): List<LarTemporario>
+    }
+    class LarTemporarioRepositoryJdbcImpl implements LarTemporarioRepository {
+        - connection: Connection
+    }
+
+    interface EventoRepository {
+        + save(evento: Evento): Evento
+        + findByPetId(petId: Long): List<Evento>
+    }
+    class EventoRepositoryJdbcImpl implements EventoRepository {
+        - connection: Connection
+    }
+
+    interface AdotanteRepository {
+        + save(adotante: Adotante): Adotante
+        + findById(id: Long): Optional<Adotante>
+        + findAll(): List<Adotante>
+    }
+    class AdotanteRepositoryJdbcImpl implements AdotanteRepository {
+        - connection: Connection
+    }
+}
+
+' ===================================
+' PACOTE: br.com.petregistry.service (Lógica de Negócio)
+' ===================================
+package "br.com.petregistry.service" {
+    class PetService {
+        - petRepository: PetRepository
+        - eventoRepository: EventoRepository
+        - adotanteRepository: AdotanteRepository
+        + registrarNovoPet(pet: Pet): Pet
+        + buscarPetPorId(id: Long): Pet
+        + atualizarPet(id: Long, petAtualizado: Pet): Pet
+        + deletarPet(id: Long): void
+        + registrarEvento(petId: Long, evento: Evento): void
+        + listarPets(status: PetStatus): List<Pet>
+        + registrarAdocao(petId: Long, adotanteId: Long): void
+    }
+
+    class LarTemporarioService {
+        - ltRepository: LarTemporarioRepository
+        + cadastrarLarTemporario(lt: LarTemporario): LarTemporario
+        + listarTodosLares(): List<LarTemporario>
+        + buscarLarTemporarioPorId(id: Long): Optional<LarTemporario>
+        + alocarPetEmLar(petId: Long, larId: Long): void
+    }
+
+    class AdotanteService {
+        - adotanteRepository: AdotanteRepository
+        + cadastrarAdotante(adotante: Adotante): Adotante
+        + buscarAdotantePorId(id: Long): Optional<Adotante>
+        + listarTodosAdotantes(): List<Adotante>
+    }
+}
+
+' ===================================
+' PACOTE: br.com.petregistry.controller (Camada de API REST com Spring Boot)
+' ===================================
+package "br.com.petregistry.controller" {
+    class PetController {
+        - petService: PetService
+        + {method} @GetMapping("/api/pets") getAllPets(@RequestParam status): ResponseEntity<List<Pet>>
+        + {method} @GetMapping("/api/pets/{id}") getPetById(@PathVariable id): ResponseEntity<Pet>
+        + {method} @PostMapping("/api/pets") createPet(@RequestBody pet): ResponseEntity<Pet>
+        + {method} @PutMapping("/api/pets/{id}") updatePet(@PathVariable id, @RequestBody pet): ResponseEntity<Pet>
+        + {method} @DeleteMapping("/api/pets/{id}") deletePet(@PathVariable id): ResponseEntity<Void>
+    }
+
+    class LarTemporarioController {
+        - larTemporarioService: LarTemporarioService
+        + {method} @GetMapping("/api/lares") getAllLares(): ResponseEntity<List<LarTemporario>>
+        + {method} @PostMapping("/api/lares") createLar(@RequestBody lt): ResponseEntity<LarTemporario>
+    }
+
+    class AdotanteController {
+        - adotanteService: AdotanteService
+        + {method} @GetMapping("/api/adotantes") getAllAdotantes(): ResponseEntity<List<Adotante>>
+        + {method} @PostMapping("/api/adotantes") createAdotante(@RequestBody adotante): ResponseEntity<Adotante>
+    }
+
+    class App {
+        + {static} main(args: String[]): void
+        + @SpringBootApplication // Anotação chave do Spring Boot
+    }
+}
+@enduml
