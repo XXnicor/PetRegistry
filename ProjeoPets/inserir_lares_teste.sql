@@ -6,6 +6,5 @@ VALUES
 ('Ana Costa', '31977665544', 'Rua Verde, 789 - Belo Horizonte/MG', 5, 0, true, 'Sítio com muito espaço')
 ON CONFLICT DO NOTHING;
 
--- Verificar se os lares foram inseridos
 SELECT * FROM lar_temporarios;
 

@@ -8,6 +8,5 @@ VALUES
 ('Carlos Oliveira', '41966554433', 'Praça Central, 321 - Curitiba/PR', 4, false)
 ON CONFLICT DO NOTHING;
 
--- Verificar se os lares foram inseridos
 SELECT * FROM lar_temporarios;
 
