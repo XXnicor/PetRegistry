@@ -7,11 +7,6 @@ import br.com.PetRegistry.model.SexType;
 
 import java.time.LocalDate;
 
-/**
- * DTO simples (somente leitura) para devolver Pet ao frontend
- * com campos planos, sem o aninhamento de "profile".
- * Mantém os nomes esperados pelo script.js (Index.html).
- */
 public class PetResponseDTO {
     private final long id;
     private final String nomeCompleto;

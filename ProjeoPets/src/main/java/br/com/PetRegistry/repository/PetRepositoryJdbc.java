@@ -301,7 +301,6 @@ public class PetRepositoryJdbc implements PetRepository {
         delete(id);
     }
 
-    // Método auxiliar para mapear ResultSet para Pet
     private Pet mapResultSetToPet(ResultSet rs) throws SQLException {
         PetProfile profile = new PetProfile(
                 rs.getString("nome_completo"),

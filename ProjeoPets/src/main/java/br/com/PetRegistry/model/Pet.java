@@ -123,7 +123,6 @@ public class Pet {
         return profile.isSociavelComCriancas();
     }
 
-    // Método auxiliar para obter o ID do lar temporário (pode ser null)
     public Long getLarTemporarioId() {
         return larTemporario != null ? larTemporario.getId() : null;
     }

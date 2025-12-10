@@ -1,19 +1,4 @@
-// ====================================================================
-// SCRIPT DE INTEGRAÇÃO FRONTEND ↔ BACKEND - PetRegistry
-// ====================================================================
-// Este arquivo conecta o Index.html aos métodos do PetController
-// Para usar em produção: adicionar endpoints REST (Spring Boot)
-// ====================================================================
-
-// Configuração da API (ajuste conforme seu servidor)
 const API_BASE_URL = 'http://localhost:9090/api';
-
-// ================================================================
-// Autenticação básica para operações de escrita (Sprint 1 - Segurança)
-// - Se variáveis ADMIN_USER/ADMIN_PASS estiverem definidas no servidor,
-//   as rotas POST/PUT/DELETE exigirão Authorization: Basic
-// - Em DEV (sem essas variáveis), não é necessário autenticar
-// ================================================================
 let ADMIN_AUTH = null;
 
 function loadSavedAuth() {
@@ -49,9 +34,6 @@ async function ensureAuthInteractive() {
     return true;
 }
 
-// ====================================================================
-// 1. LISTAR TODOS OS PETS (ao carregar a página)
-// ====================================================================
 async function carregarPets() {
     try {
         const response = await fetch(`${API_BASE_URL}/pets`);
@@ -65,12 +47,9 @@ async function carregarPets() {
     }
 }
 
-// ====================================================================
-// 2. RENDERIZAR PETS NO GRID
-// ====================================================================
 function renderizarPets(pets) {
     const petGrid = document.getElementById('petGrid');
-    petGrid.innerHTML = ''; // Limpar grid
+    petGrid.innerHTML = '';
 
     pets.forEach(pet => {
         const card = criarCardPet(pet);
@@ -78,14 +57,10 @@ function renderizarPets(pets) {
     });
 }
 
-// ====================================================================
-// 3. CRIAR CARD HTML PARA UM PET
-// ====================================================================
 function criarCardPet(pet) {
     const col = document.createElement('div');
     col.className = 'col-md-4';
 
-    // Mapear status para badge colorido
     const statusBadge = {
         'DISPONIVEL_ADOCAO': 'bg-success',
         'EM_TRATAMENTO': 'bg-danger',
@@ -94,27 +69,23 @@ function criarCardPet(pet) {
         'RESERVADO': 'bg-info'
     };
 
-    // Mapear tipo para exibição
     const tipoDisplay = {
         'CACHORRO': 'Cachorro',
         'GATO': 'Gato',
         'OUTRO': 'Outro'
     };
 
-    // Mapear sexo para exibição
     const sexoDisplay = {
         'MACHO': 'Macho',
         'FEMEA': 'Fêmea'
     };
 
-    // Mapear porte para exibição
     const porteDisplay = {
         'PEQUENO': 'Pequeno',
         'MEDIO': 'Médio',
         'GRANDE': 'Grande'
     };
 
-    // Mapear status para texto
     const statusDisplay = {
         'DISPONIVEL_ADOCAO': 'Disponível para Adoção',
         'EM_TRATAMENTO': 'Em Tratamento',
@@ -155,10 +126,7 @@ function criarCardPet(pet) {
     return col;
 }
 
-// ====================================================================
-// 4. CADASTRAR / ATUALIZAR PET (botão "Salvar Pet")
-// ====================================================================
-let CURRENT_EDIT_ID = null; // nulo = modo cadastro; número = modo edição
+let CURRENT_EDIT_ID = null;
 
 document.getElementById('btnSalvarPet').addEventListener('click', async () => {
     if (CURRENT_EDIT_ID) {
@@ -169,7 +137,6 @@ document.getElementById('btnSalvarPet').addEventListener('click', async () => {
 });
 
 async function cadastrarNovoPet() {
-    // Coletar dados do formulário (PetRequestDTO)
     const petData = {
         nome: document.getElementById('nome').value,
         fotoUrl: document.getElementById('fotoUrl').value || null,
@@ -216,12 +183,11 @@ async function cadastrarNovoPet() {
 }
 
 async function atualizarPetExistente(id) {
-    // Montar corpo com PetUpdateDTO
     const updateData = {
         nome: document.getElementById('nome').value || null,
         idade: parseInt(document.getElementById('idade').value) || 0,
         descricao: document.getElementById('observacoes').value || null,
-        historicoSaude: null, // não coletado na UI
+        historicoSaude: null,
         portePet: document.getElementById('porte').value || null
     };
 
@@ -253,9 +219,6 @@ async function atualizarPetExistente(id) {
     }
 }
 
-// ====================================================================
-// 5. FILTRAR PETS POR STATUS
-// ====================================================================
 document.getElementById('filtroStatus').addEventListener('change', async (e) => {
     const status = e.target.value;
 
@@ -276,9 +239,6 @@ document.getElementById('filtroStatus').addEventListener('change', async (e) => 
     }
 });
 
-// ====================================================================
-// 6. EXCLUIR PET
-// ====================================================================
 async function excluirPet(petId) {
     if (!confirm('Tem certeza que deseja excluir este pet?')) {
         return;
@@ -316,9 +276,6 @@ async function excluirPet(petId) {
     }
 }
 
-// ====================================================================
-// 7. EDITAR PET (TODO: implementar modal de edição)
-// ====================================================================
 async function editarPet(petId) {
     try {
         const response = await fetch(`${API_BASE_URL}/pets/${petId}`);
@@ -326,18 +283,15 @@ async function editarPet(petId) {
 
         const pet = await response.json();
 
-        // Preencher modal de edição com dados do pet
         preencherFormularioComPet(pet);
         CURRENT_EDIT_ID = pet.id;
 
-        // Ajustar título e botão
         const modalEl = document.getElementById('addPetModal');
         const title = modalEl.querySelector('#modalLabel');
         if (title) title.textContent = `Editar Pet: ${pet.nomeCompleto}`;
         const btnSalvar = document.getElementById('btnSalvarPet');
         if (btnSalvar) btnSalvar.textContent = 'Atualizar Pet';
 
-        // Abrir modal
         const bsModal = new bootstrap.Modal(modalEl);
         bsModal.show();
 
@@ -348,7 +302,6 @@ async function editarPet(petId) {
 }
 
 function preencherFormularioComPet(pet) {
-    // Mapa DTO -> campos do formulário
     document.getElementById('nome').value = pet.nomeCompleto || '';
     document.getElementById('fotoUrl').value = pet.fotoUrl || '';
     document.getElementById('tipo').value = pet.tipo || 'CACHORRO';
@@ -356,12 +309,10 @@ function preencherFormularioComPet(pet) {
     document.getElementById('porte').value = pet.porte || 'MEDIO';
     document.getElementById('status').value = pet.status || 'DISPONIVEL_ADOCAO';
     document.getElementById('idade').value = pet.idadeAproximada || 0;
-    // dataEntrada vem em ISO yyyy-MM-dd
     if (pet.dataEntrada) {
         document.getElementById('dataEntrada').value = pet.dataEntrada;
     }
     document.getElementById('observacoes').value = pet.observacoes || '';
-    // castrado/vacinado não estão no DTO de resposta atualmente — mantemos como está
 }
 
 function fecharModalResetar() {
@@ -369,7 +320,6 @@ function fecharModalResetar() {
     const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
     modal.hide();
     document.getElementById('petForm').reset();
-    // Resetar UI para modo cadastro
     CURRENT_EDIT_ID = null;
     const title = modalEl.querySelector('#modalLabel');
     if (title) title.textContent = 'Cadastrar Novo Pet';
@@ -377,38 +327,19 @@ function fecharModalResetar() {
     if (btnSalvar) btnSalvar.textContent = 'Salvar Pet';
 }
 
-// ====================================================================
-// 8. CARREGAR PETS AO INICIALIZAR A PÁGINA
-// ====================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🐾 PetRegistry carregado!');
     loadSavedAuth();
-    carregarPets(); // ✅ Agora está ativo!
-    // Botão de upload de foto (Sprint 2 - Upload)
+    carregarPets();
     const btnUpload = document.getElementById('btnUploadFoto');
     if (btnUpload) {
         btnUpload.addEventListener('click', uploadFoto);
     }
-    // Quando o modal fechar, resetar o estado (voltar para modo cadastro)
     const modalEl = document.getElementById('addPetModal');
     if (modalEl) {
         modalEl.addEventListener('hidden.bs.modal', () => fecharModalResetar());
     }
 });
 
-// ====================================================================
-// ENDPOINTS QUE VOCÊ PRECISA CRIAR NO BACKEND:
-// ====================================================================
-// GET    /api/pets              → listarTodosOsPets()
-// GET    /api/pets/{id}         → buscarPetPorId(id)
-// GET    /api/pets/status/{s}   → listarPetsPorStatus(status)
-// POST   /api/pets              → cadastrarPet(dto)
-// PUT    /api/pets/{id}         → atualizarPet(id, dto)
-// DELETE /api/pets/{id}         → removerPet(id)
-// ====================================================================
-
-
-// Utilitário: tenta extrair mensagem de erro do backend
 async function safeError(response) {
     try {
         const data = await response.json();
@@ -422,11 +353,6 @@ async function safeError(response) {
     }
 }
 
-// ====================================================================
-// Upload de imagem (Cloudinary via backend) - Sprint 2
-// - Envia arquivo selecionado (#fileFoto) para POST /api/upload
-// - Preenche automaticamente o campo #fotoUrl com a URL retornada
-// ====================================================================
 async function uploadFoto() {
     const fileInput = document.getElementById('fileFoto');
     const file = fileInput && fileInput.files ? fileInput.files[0] : null;
@@ -441,7 +367,6 @@ async function uploadFoto() {
             response = await fetch(`${API_BASE_URL}/upload`, {
                 method: 'POST',
                 headers: {
-                    // Não definir Content-Type manualmente com FormData
                     ...authHeader()
                 },
                 body: formData
@@ -457,7 +382,6 @@ async function uploadFoto() {
                 });
             }
         } else {
-            // Sem arquivo: permitir informar uma URL e encaminhar ao backend (opcional)
             const provided = (fotoUrlInput && fotoUrlInput.value) ? fotoUrlInput.value.trim() : '';
             if (!provided) {
                 alert('Selecione um arquivo de imagem ou informe uma URL no campo acima.');

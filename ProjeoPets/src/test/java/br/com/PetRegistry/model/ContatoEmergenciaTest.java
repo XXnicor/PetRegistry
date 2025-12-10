@@ -8,10 +8,8 @@ class ContatoEmergenciaTest {
 
     @Test
     void deveCriarContatoValido() {
-        // arrange & act
         ContatoEmergencia contato = new ContatoEmergencia("Ana Souza", "+5511998765432");
 
-        // assert
         assertEquals("Ana Souza", contato.getNomeCompleto());
         assertEquals("+5511998765432", contato.getTelefone());
     }

@@ -1,39 +1,30 @@
 package br.com.PetRegistry.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
 import java.util.Objects;
-import java.util.regex.Pattern;
 
-@Entity
-public final class ContatoEmergencia {
+public class ContatoEmergencia {
 
-    private String nomeCompleto;
-    private String telefone;
-
+    private final String nomeCompleto;
+    private final String telefone;
 
     public ContatoEmergencia(String nomeCompleto, String telefone) {
-        this.nomeCompleto = validarNome(nomeCompleto);
-        this.telefone = validarTelefone(telefone);
+        validarNome(nomeCompleto);
+        validarTelefone(telefone);
+        this.nomeCompleto = nomeCompleto;
+        this.telefone = telefone;
     }
 
-    public ContatoEmergencia() {
-
+    private void validarNome(String nome) {
+        if (nome == null || nome.trim().length() < 3) {
+            throw new IllegalArgumentException("Nome deve ter no mínimo 3 caracteres");
+        }
     }
 
-    public Long getId() {
-        return id;
+    private void validarTelefone(String telefone) {
+        if (telefone == null || telefone.length() < 10) {
+            throw new IllegalArgumentException("Telefone inválido");
+        }
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Id
-    private Long id;
-    private static final Pattern TELEFONE_PATTERN = Pattern.compile("^\\d{11}$");
-
 
     public String getNomeCompleto() {
         return nomeCompleto;
@@ -48,7 +39,8 @@ public final class ContatoEmergencia {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContatoEmergencia that = (ContatoEmergencia) o;
-        return nomeCompleto.equals(that.nomeCompleto) && telefone.equals(that.telefone);
+        return Objects.equals(nomeCompleto, that.nomeCompleto) &&
+               Objects.equals(telefone, that.telefone);
     }
 
     @Override
@@ -63,25 +55,5 @@ public final class ContatoEmergencia {
                 ", telefone='" + telefone + '\'' +
                 '}';
     }
-
-    private String validarNome(final String nome) {
-        Objects.requireNonNull(nome, "Nome do contato é obrigatório");
-        String trimmed = nome.trim();
-        if (trimmed.length() < 3) {
-            throw new IllegalArgumentException("Nome do contato deve ter ao menos 3 caracteres úteis");
-        }
-        return trimmed;
-    }
-
-    private String validarTelefone(final String numero) {
-        Objects.requireNonNull(numero, "Telefone do contato é obrigatório");
-        String apenasDigitos = numero.replaceAll("[^0-9]", "");
-        if (apenasDigitos.length() == 13 && apenasDigitos.startsWith("55")) {
-            apenasDigitos = apenasDigitos.substring(2);
-        }
-        if (!TELEFONE_PATTERN.matcher(apenasDigitos).matches()) {
-            throw new IllegalArgumentException("Telefone deve conter DDD + 9 dígitos (ex.: 11999998888)");
-        }
-        return "+55" + apenasDigitos;
-    }
 }
+

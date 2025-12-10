@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PetMapper {
     public Pet toEntity(PetRequestDTO dto, LarTemporario lar) {
+
         PetProfile profile = new PetProfile(
                 dto.getNome(),
                 dto.getFotoUrl(),
