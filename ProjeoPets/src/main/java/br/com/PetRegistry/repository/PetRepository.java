@@ -20,17 +20,17 @@ public interface PetRepository {
 
     List<Pet> findByStatus(String status);
 
-    // Busca por nome (case-insensitive, parcial)
+    // Busca é case-sensitive
     List<Pet> findByName(String nome);
 
-    // Listagem paginada (offset/limit)
     List<Pet> findAllPaged(int offset, int limit);
 
-    // Métodos adicionais necessários
     List<Pet> findByProfileNomeCompletoContainingIgnoreCase(String nome);
 
     boolean existsById(Long id);
 
     void deleteById(Long id);
+
+    List<Pet> findByLarTemporarioId(Long larTemporarioId);
 
 }

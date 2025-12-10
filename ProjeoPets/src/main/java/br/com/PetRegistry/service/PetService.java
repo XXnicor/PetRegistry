@@ -21,7 +21,7 @@ public class PetService {
 
     private final PetRepository petRepository;
     private final EventoRepository eventoRepository;
-    private final LarTemporarioRepository larTemporarioRepository; // Necessário para o relacionamento
+    private final LarTemporarioRepository larTemporarioRepository;
     private final StatusValidator statusValidator;
     private final PetMapper petMapper;
 
@@ -58,7 +58,7 @@ public class PetService {
         Pet pet = petRepository.findById(id)
                 .orElseThrow(() -> new RegrasDeNegocioExceptions("Pet não encontrado com id: " + id));
         pet.setStatus(PetStatus.valueOf(status));
-        petRepository.save(pet); // Usar save para atualização
+        petRepository.save(pet);
     }
 
     @Transactional
@@ -113,6 +113,37 @@ public class PetService {
                 .orElseThrow(() -> new RegrasDeNegocioExceptions("Pet não encontrado com id: " + petId));
 
         petMapper.updateEntityFromDto(dto, pet);
+
+        if (dto.getLarTemporarioId() != null) {
+            LarTemporario lar = larTemporarioRepository.findLarTemporarioById(dto.getLarTemporarioId())
+                    .orElseThrow(() -> new RegrasDeNegocioExceptions("Lar temporário com ID " + dto.getLarTemporarioId() + " não encontrado"));
+            pet.setLarTemporario(lar);
+            if (!pet.getStatus().equals(PetStatus.EM_LAR_TEMPORARIO)) {
+                pet.setStatus(PetStatus.EM_LAR_TEMPORARIO);
+            }
+        } else {
+            pet.setLarTemporario(null);
+        }
+
+        return petRepository.save(pet);
+    }
+
+    @Transactional
+    public Pet associarLarTemporario(Long petId, Long larTemporarioId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new RegrasDeNegocioExceptions("Pet não encontrado com id: " + petId));
+
+        if (larTemporarioId != null) {
+            LarTemporario lar = larTemporarioRepository.findLarTemporarioById(larTemporarioId)
+                    .orElseThrow(() -> new RegrasDeNegocioExceptions("Lar temporário com ID " + larTemporarioId + " não encontrado"));
+            pet.setLarTemporario(lar);
+            if (!pet.getStatus().equals(PetStatus.EM_LAR_TEMPORARIO)) {
+                pet.setStatus(PetStatus.EM_LAR_TEMPORARIO);
+            }
+        } else {
+            pet.setLarTemporario(null);
+        }
+
         return petRepository.save(pet);
     }
 
@@ -122,5 +153,13 @@ public class PetService {
             throw new RegrasDeNegocioExceptions("Pet não encontrado com id: " + petId);
         }
         return eventoRepository.findByPetId(petId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Pet> findPetsByLarTemporarioId(Long larTemporarioId) {
+        if (!larTemporarioRepository.findLarTemporarioById(larTemporarioId).isPresent()) {
+            throw new RegrasDeNegocioExceptions("Lar temporário não encontrado com id: " + larTemporarioId);
+        }
+        return petRepository.findByLarTemporarioId(larTemporarioId);
     }
 }

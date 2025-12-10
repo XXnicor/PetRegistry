@@ -13,7 +13,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/lares-temporarios")
+@RequestMapping("/api/lares-temporarios")
+@CrossOrigin(origins = "*")
 public class LarTemporarioController {
 
     private final LarTemporarioService larTemporarioService;

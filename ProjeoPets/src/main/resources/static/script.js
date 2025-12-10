@@ -8,14 +8,14 @@ function loadSavedAuth() {
         if (user && pass) {
             ADMIN_AUTH = { user, pass };
         }
-    } catch (_) { /* ignore */ }
+    } catch (_) {}
 }
 
 function saveAuth(user, pass) {
     try {
         localStorage.setItem('adminUser', user);
         localStorage.setItem('adminPass', pass);
-    } catch (_) { /* ignore */ }
+    } catch (_) {}
 }
 
 function authHeader() {
@@ -44,6 +44,35 @@ async function carregarPets() {
     } catch (error) {
         console.error('Erro:', error);
         alert('Erro ao carregar pets do servidor');
+    }
+}
+
+async function carregarLaresTemporarios() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/lares-temporarios`);
+
+        if (!response.ok) {
+            return;
+        }
+
+        const lares = await response.json();
+
+        const select = document.getElementById('larTemporario');
+
+        if (!select) {
+            return;
+        }
+
+        select.innerHTML = '<option value="">Nenhum</option>';
+        lares.forEach(lar => {
+            const option = document.createElement('option');
+            option.value = lar.id;
+            option.textContent = `${lar.nomeResponsavel} - ${lar.enderecoCompleto}`;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar lares:', error);
     }
 }
 
@@ -137,6 +166,9 @@ document.getElementById('btnSalvarPet').addEventListener('click', async () => {
 });
 
 async function cadastrarNovoPet() {
+    const larTemporarioSelect = document.getElementById('larTemporario');
+    const larTemporarioId = larTemporarioSelect && larTemporarioSelect.value ? parseInt(larTemporarioSelect.value) : null;
+
     const petData = {
         nome: document.getElementById('nome').value,
         fotoUrl: document.getElementById('fotoUrl').value || null,
@@ -151,7 +183,8 @@ async function cadastrarNovoPet() {
         sexType: document.getElementById('sexo').value,
         portePet: document.getElementById('porte').value,
         statusPet: document.getElementById('status').value,
-        entradaPet: document.getElementById('dataEntrada').value
+        entradaPet: document.getElementById('dataEntrada').value,
+        larTemporarioId: larTemporarioId
     };
 
     try {
@@ -183,12 +216,19 @@ async function cadastrarNovoPet() {
 }
 
 async function atualizarPetExistente(id) {
+    const larTemporarioSelect = document.getElementById('larTemporario');
+
+    const valorSelect = larTemporarioSelect ? larTemporarioSelect.value : '';
+
+    const larTemporarioId = valorSelect && valorSelect !== '' ? parseInt(valorSelect) : null;
+
     const updateData = {
         nome: document.getElementById('nome').value || null,
         idade: parseInt(document.getElementById('idade').value) || 0,
         descricao: document.getElementById('observacoes').value || null,
         historicoSaude: null,
-        portePet: document.getElementById('porte').value || null
+        portePet: document.getElementById('porte').value || null,
+        larTemporarioId: larTemporarioId
     };
 
     try {
@@ -210,6 +250,9 @@ async function atualizarPetExistente(id) {
             const err = await safeError(response);
             throw new Error(err);
         }
+
+        const petAtualizado = await response.json();
+
         alert('Pet atualizado com sucesso!');
         fecharModalResetar();
         carregarPets();
@@ -313,6 +356,13 @@ function preencherFormularioComPet(pet) {
         document.getElementById('dataEntrada').value = pet.dataEntrada;
     }
     document.getElementById('observacoes').value = pet.observacoes || '';
+
+    const larTemporarioSelect = document.getElementById('larTemporario');
+    if (larTemporarioSelect && pet.larTemporarioId) {
+        larTemporarioSelect.value = pet.larTemporarioId;
+    } else if (larTemporarioSelect) {
+        larTemporarioSelect.value = '';
+    }
 }
 
 function fecharModalResetar() {
@@ -330,6 +380,7 @@ function fecharModalResetar() {
 document.addEventListener('DOMContentLoaded', () => {
     loadSavedAuth();
     carregarPets();
+    carregarLaresTemporarios();
     const btnUpload = document.getElementById('btnUploadFoto');
     if (btnUpload) {
         btnUpload.addEventListener('click', uploadFoto);
@@ -337,6 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalEl = document.getElementById('addPetModal');
     if (modalEl) {
         modalEl.addEventListener('hidden.bs.modal', () => fecharModalResetar());
+        modalEl.addEventListener('shown.bs.modal', () => carregarLaresTemporarios());
     }
 });
 

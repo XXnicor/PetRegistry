@@ -93,6 +93,13 @@ public class PetController {
         petService.atualizarStatus(id, status);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/lar-temporario")
+    public ResponseEntity<PetResponseDTO> associarLarTemporario(@PathVariable long id, @RequestParam(required = false) Long larTemporarioId) {
+        Pet petAtualizado = petService.associarLarTemporario(id, larTemporarioId);
+        return ResponseEntity.ok(petMapper.toResponse(petAtualizado));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerPet(@PathVariable long id) {
         petService.deletarPet(id);
@@ -102,5 +109,14 @@ public class PetController {
     public ResponseEntity<List<Evento>> listarEventosPorPet(@PathVariable long petId) {
         List<Evento> eventos = petService.findEventoByPetId(petId);
         return ResponseEntity.ok(eventos);
+    }
+
+    @GetMapping("/lar-temporario/{larId}")
+    public ResponseEntity<List<PetResponseDTO>> listarPetsPorLarTemporario(@PathVariable long larId) {
+        List<Pet> pets = petService.findPetsByLarTemporarioId(larId);
+        List<PetResponseDTO> responseList = pets.stream()
+                .map(petMapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(responseList);
     }
 }

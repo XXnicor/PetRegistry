@@ -18,6 +18,7 @@ public class PetResponseDTO {
     private final int idadeAproximada;
     private final LocalDate dataEntrada;
     private final String observacoes;
+    private final Long larTemporarioId;
 
     public PetResponseDTO(long id,
                           String nomeCompleto,
@@ -28,7 +29,8 @@ public class PetResponseDTO {
                           PetStatus status,
                           int idadeAproximada,
                           LocalDate dataEntrada,
-                          String observacoes) {
+                          String observacoes,
+                          Long larTemporarioId) {
         this.id = id;
         this.nomeCompleto = nomeCompleto;
         this.fotoUrl = fotoUrl;
@@ -39,6 +41,7 @@ public class PetResponseDTO {
         this.idadeAproximada = idadeAproximada;
         this.dataEntrada = dataEntrada;
         this.observacoes = observacoes;
+        this.larTemporarioId = larTemporarioId;
     }
 
     public long getId() { return id; }
@@ -51,4 +54,5 @@ public class PetResponseDTO {
     public int getIdadeAproximada() { return idadeAproximada; }
     public LocalDate getDataEntrada() { return dataEntrada; }
     public String getObservacoes() { return observacoes; }
+    public Long getLarTemporarioId() { return larTemporarioId; }
 }

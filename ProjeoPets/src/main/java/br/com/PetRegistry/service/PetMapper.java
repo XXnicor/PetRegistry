@@ -69,7 +69,8 @@ public class PetMapper {
                 pet.getStatus(),
                 pet.getIdadeAproximada(),
                 pet.getDataEntrada(),
-                pet.getObservacoes()
+                pet.getObservacoes(),
+                pet.getLarTemporarioId()
         );
     }
 }

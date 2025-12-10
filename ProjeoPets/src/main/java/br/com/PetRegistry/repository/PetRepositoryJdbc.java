@@ -22,6 +22,9 @@ public class PetRepositoryJdbc implements PetRepository {
 
     @Override
     public Pet save(Pet pet) {
+        if (pet.getId() != null && pet.getId() > 0) {
+            return update(pet);
+        }
 
         String sql = "INSERT INTO pet (nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada,historico_medico,observacoes," +
                 "castrado,vacinado,sociavel_com_caes,sociavel_com_gatos,sociavel_com_criancas,lar_temporario_id)" +
@@ -299,6 +302,29 @@ public class PetRepositoryJdbc implements PetRepository {
     @Override
     public void deleteById(Long id) {
         delete(id);
+    }
+
+    @Override
+    public List<Pet> findByLarTemporarioId(Long larTemporarioId) {
+        String sql = "SELECT id,nome_completo,foto_url,tipo,sexo,porte,status,idade_aproximada,data_entrada," +
+                "historico_medico,observacoes,castrado,vacinado,sociavel_com_caes,sociavel_com_gatos,sociavel_com_criancas,lar_temporario_id " +
+                "FROM pet WHERE lar_temporario_id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement smt = connection.prepareStatement(sql)) {
+
+            smt.setLong(1, larTemporarioId);
+
+            try (ResultSet rs = smt.executeQuery()) {
+                List<Pet> pets = new ArrayList<>();
+                while (rs.next()) {
+                    pets.add(mapResultSetToPet(rs));
+                }
+                return pets;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar pets por lar temporário: " + e.getMessage(), e);
+        }
     }
 
     private Pet mapResultSetToPet(ResultSet rs) throws SQLException {

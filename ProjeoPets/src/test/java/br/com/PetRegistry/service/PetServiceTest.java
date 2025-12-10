@@ -42,57 +42,56 @@ class PetServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Criar PetRequestDTO imutável usando construtor completo
         petRequestDTO = new PetRequestDTO(
-                "Rex",                          // nome
-                "http://example.com/foto.jpg",  // fotoUrl
-                "Canina",                       // especie
-                "Labrador",                     // raca
-                2,                              // idade
-                "Pet amigável",                 // descricao
-                "Vacinado em dia",              // historicoSaude
-                true,                           // castrado
-                true,                           // vacinado
-                PetType.CACHORRO,               // petType
-                SexType.MACHO,                  // sexType
-                Porte.GRANDE,                   // portePet
-                PetStatus.DISPONIVEL_ADOCAO,    // statusPet
-                LocalDate.now(),                // entradaPet
-                1L                              // larTemporarioId
+                "Rex",
+                "http://example.com/foto.jpg",
+                "Canina",
+                "Labrador",
+                2,
+                "Pet amigável",
+                "Vacinado em dia",
+                true,
+                true,
+                PetType.CACHORRO,
+                SexType.MACHO,
+                Porte.GRANDE,
+                PetStatus.DISPONIVEL_ADOCAO,
+                LocalDate.now(),
+                1L
         );
 
         larTemporario = new LarTemporario();
 
         PetProfile profile = new PetProfile(
-                "Rex",                          // nomeCompleto
-                "http://example.com/foto.jpg",  // fotoUrl
-                PetType.CACHORRO,               // tipo
-                SexType.MACHO,                  // sexo
-                Porte.GRANDE,                   // porte
-                2,                              // idadeAproximada
-                LocalDate.now(),                // dataEntrada
-                "Vacinado em dia",              // historicoMedico
-                "Pet amigável",                 // observacoes
-                true,                           // castrado
-                true,                           // vacinado
-                false,                          // sociavelComCaes
-                false,                          // sociavelComGatos
-                false                           // sociavelComCriancas
+                "Rex",
+                "http://example.com/foto.jpg",
+                PetType.CACHORRO,
+                SexType.MACHO,
+                Porte.GRANDE,
+                2,
+                LocalDate.now(),
+                "Vacinado em dia",
+                "Pet amigável",
+                true,
+                true,
+                false,
+                false,
+                false
         );
         pet = new Pet(PetStatus.DISPONIVEL_ADOCAO, profile, larTemporario);
     }
 
     @Test
     void cadastrarPet_ComLarTemporario_DeveRetornarPetSalvo() {
-        // ARRANGE
+
         when(larTemporarioRepository.findLarTemporarioById(1L)).thenReturn(Optional.of(larTemporario));
         when(petMapper.toEntity(petRequestDTO, larTemporario)).thenReturn(pet);
         when(petRepository.save(any(Pet.class))).thenReturn(pet);
 
-        // ACT
+
         Pet petSalvo = petService.cadastrarPet(petRequestDTO);
 
-        // ASSERT
+
         assertNotNull(petSalvo);
         assertEquals("Rex", petSalvo.getNomeCompleto());
         assertNotNull(petSalvo.getLarTemporario());

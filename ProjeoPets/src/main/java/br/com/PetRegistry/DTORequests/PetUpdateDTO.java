@@ -19,12 +19,15 @@ public class PetUpdateDTO {
 
     private final Porte portePet;
 
-    public PetUpdateDTO(String nome, int idade, String descricao, String historicoSaude, Porte portePet) {
+    private final Long larTemporarioId;
+
+    public PetUpdateDTO(String nome, int idade, String descricao, String historicoSaude, Porte portePet, Long larTemporarioId) {
         this.nome = nome;
         this.idade = idade;
         this.descricao = descricao;
         this.historicoSaude = historicoSaude;
         this.portePet = portePet;
+        this.larTemporarioId = larTemporarioId;
     }
 
     public String getNome() { return nome; }
@@ -32,4 +35,5 @@ public class PetUpdateDTO {
     public String getDescricao() { return descricao; }
     public String getHistoricoSaude() { return historicoSaude; }
     public Porte getPortePet() { return portePet; }
+    public Long getLarTemporarioId() { return larTemporarioId; }
 }

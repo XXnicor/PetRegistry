@@ -1,4 +1,3 @@
--- Execute este script no pgAdmin ou psql para criar o banco ProjetoPets
 
 CREATE DATABASE "ProjetoPets"
     WITH

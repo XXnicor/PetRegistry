@@ -23,7 +23,7 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
 
     @Override
     public LarTemporario saveLarTemporario(LarTemporario larTemporario) {
-        String sql="INSERT INTO larTemporario(nomeResponsavel,contato, enderecoCompleto,capacidadeMaxima,semVagas)"+
+        String sql="INSERT INTO lar_temporario(nome_responsavel,contato, endereco_completo,capacidade_maxima,sem_vagas)"+
                 " VALUES (?,?,?,?,?)";
 
         try(Connection connection = dataSource.getConnection();
@@ -53,7 +53,7 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
     @Override
     public Optional<LarTemporario> findLarTemporarioById(long id) {
 
-        String sql = "SELECT id,nomeResponsavel,contato,enderecoCompleto,capacidadeMaxima,semVagas FROM larTemporario WHERE id=?";
+        String sql = "SELECT id,nome_responsavel,contato,endereco_completo,capacidade_maxima,sem_vagas FROM lar_temporario WHERE id=?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)) {
@@ -64,11 +64,11 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
                 if (rs.next()) {
                     LarTemporario larTemporario = new LarTemporario(
                             rs.getLong("id")
-                            , rs.getString("nomeResponsavel")
+                            , rs.getString("nome_responsavel")
                             , rs.getString("contato")
-                            , rs.getString("enderecoCompleto")
-                            , rs.getInt("capacidadeMaxima")
-                            , rs.getBoolean("semVagas"));
+                            , rs.getString("endereco_completo")
+                            , rs.getInt("capacidade_maxima")
+                            , rs.getBoolean("sem_vagas"));
 
                     return Optional.of(larTemporario);
                 }
@@ -82,7 +82,7 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
     @Override
     public List<LarTemporario> findAllLarTemporario() {
 
-        String sql="SELECT id,nomeResponsavel,contato,enderecoCompleto,capacidadeMaxima,semVagas FROM larTemporario";
+        String sql="SELECT id,nome_responsavel,contato,endereco_completo,capacidade_maxima,sem_vagas FROM lar_temporario";
 
         try(Connection connection = dataSource.getConnection();
             PreparedStatement smt = connection.prepareStatement(sql)){
@@ -94,11 +94,11 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
                 while(rs.next()){
                     LarTemporario larTemporario = new LarTemporario(
                             rs.getLong("id")
-                            , rs.getString("nomeResponsavel")
+                            , rs.getString("nome_responsavel")
                             , rs.getString("contato")
-                            , rs.getString("enderecoCompleto")
-                            , rs.getInt("capacidadeMaxima")
-                            , rs.getBoolean("semVagas"));
+                            , rs.getString("endereco_completo")
+                            , rs.getInt("capacidade_maxima")
+                            , rs.getBoolean("sem_vagas"));
 
                     larTemporarios.add(larTemporario);
                 }
@@ -115,7 +115,7 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
         if(id <= 0){
             throw new IllegalArgumentException("ID inválido");
         }
-        String sql="DELETE FROM larTemporario WHERE id=?";
+        String sql="DELETE FROM lar_temporario WHERE id=?";
         try(Connection connection = dataSource.getConnection();
             PreparedStatement smt = connection.prepareStatement(sql)){
             smt.setLong(1,id);
@@ -131,8 +131,8 @@ public class LartemporarioRepositoryJdbc implements LarTemporarioRepository {
 
     @Override
     public LarTemporario updateLarTemporario(LarTemporario larTemporario) {
-        String sql = "UPDATE larTemporario SET nomeResponsavel = ?, contato = ?, " +
-                "enderecoCompleto = ?, capacidadeMaxima = ?, semVagas = ? WHERE id = ?";
+        String sql = "UPDATE lar_temporario SET nome_responsavel = ?, contato = ?, " +
+                "endereco_completo = ?, capacidade_maxima = ?, sem_vagas = ? WHERE id = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement smt = connection.prepareStatement(sql)) {

@@ -11,10 +11,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Adaptador para serializar/deserializar LocalDate no formato ISO (yyyy-MM-dd)
- * Para uso com Jackson
- */
 public class LocalDateAdapter {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
