@@ -496,3 +496,4 @@ async function uploadFoto() {
         alert('Erro no upload: ' + (error.message || ''));
     }
 }
+

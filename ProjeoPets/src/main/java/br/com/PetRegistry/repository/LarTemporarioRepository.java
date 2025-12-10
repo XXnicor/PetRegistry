@@ -14,6 +14,6 @@ public interface LarTemporarioRepository {
     Optional<LarTemporario> findLarTemporarioById(long id);
 
     List<LarTemporario> findAllLarTemporario();
-    
+
     boolean deleteLarTemporarioById(long id);
 }

@@ -22,7 +22,7 @@ public class AdotanteService {
             throw new RegrasDeNegocioExceptions("Dados do adotante são obrigatórios");
         }
         Adotante novoAdotante = new Adotante(
-                0, // ID será gerado pelo banco
+                0,
                 dto.getNomeResponsavel(),
                 dto.getCpf(),
                 dto.getContato(),

@@ -35,7 +35,6 @@ public class PetService {
 
     @Transactional
     public Pet cadastrarPet(PetRequestDTO dto) {
-        // O Mapper agora pode precisar buscar o LarTemporario, ou receber null
         LarTemporario lar = null;
         if (dto.getLarTemporarioId() != null) {
             lar = larTemporarioRepository.findLarTemporarioById(dto.getLarTemporarioId())
@@ -78,12 +77,9 @@ public class PetService {
 
     @Transactional(readOnly = true)
     public List<Pet> findAllPaged(int page, int size) {
-        // A lógica de paginação deve ser feita no repositório com Pageable
-        // Esta implementação manual é um ponto para melhoria futura
         int sanitizedPage = Math.max(0, page);
         int sanitizedSize = size <= 0 ? 20 : Math.min(size, 50);
         int offset = sanitizedPage * sanitizedSize;
-        // Supondo que você tenha um método customizado para isso. O ideal é usar PageRequest.
         return petRepository.findAllPaged(offset, sanitizedSize);
     }
 

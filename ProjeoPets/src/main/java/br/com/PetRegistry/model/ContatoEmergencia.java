@@ -14,8 +14,8 @@ public final class ContatoEmergencia {
 
 
     public ContatoEmergencia(String nomeCompleto, String telefone) {
-        this.nomeCompleto = nomeCompleto;
-        this.telefone = telefone;
+        this.nomeCompleto = validarNome(nomeCompleto);
+        this.telefone = validarTelefone(telefone);
     }
 
     public ContatoEmergencia() {
