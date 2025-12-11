@@ -4,14 +4,14 @@ Sistema completo de gerenciamento para ONGs de adoção de animais, desenvolvido
 
 ## 📋 Sobre o Projeto
 
-O PetRegistry é uma API REST robusta para gerenciamento de pets, adotantes e lares temporários, facilitando o processo de adoção e acompanhamento de animais resgatados por ONGs e instituições de proteção animal.
+O PetRegistry oferece uma API REST e uma interface web para acompanhar todo o ciclo de cadastro, adoção e acompanhamento de animais resgatados. A ideia é centralizar os dados de pets, adotantes e lares temporários em uma ferramenta simples de manter e expandir.
 
 ## 🚀 Tecnologias Utilizadas
 
 - **Java 17**
 - **Spring Boot 3.2.5**
   - Spring Web
-  - Spring Data JPA
+  - Spring JDBC Template
   - Spring Validation
 - **PostgreSQL** - Banco de dados relacional
 - **Maven** - Gerenciamento de dependências
@@ -82,54 +82,45 @@ mvn spring-boot:run
 
 ### Interface Web (Browser)
 
-#### Cadastro de Pet
-https://github.com/user-attachments/assets/cadastro-pet-demo.mp4
+**Cadastro de Pet** – fluxo completo de registro pelo formulário web.
 
-<video src="Docs/gifs/browser/Cadastro do pet.mp4" width="600" controls></video>
+<img src="Docs/gifs/browser/Cadastro%20do%20pet.gif" width="700" alt="Cadastro de pet no navegador" />
 
-#### Edição de Pet
-https://github.com/user-attachments/assets/edicao-pet-demo.mp4
+**Edição de Pet** – atualização dos dados direto pela interface.
 
-<video src="Docs/gifs/browser/Edição do pet.mp4" width="600" controls></video>
+<img src="Docs/gifs/browser/Edi%C3%A7%C3%A3o%20do%20pet.gif" width="700" alt="Edição de pet no navegador" />
 
-#### Exclusão de Pet
-https://github.com/user-attachments/assets/exclusao-pet-demo.mp4
+**Exclusão de Pet** – remoção segura com feedback visual.
 
-<video src="Docs/gifs/browser/Exclusão do pet.mp4" width="600" controls></video>
+<img src="Docs/gifs/browser/Exclus%C3%A3o%20do%20pet.gif" width="700" alt="Exclusão de pet no navegador" />
 
-#### Fluxo Completo de Adoção
-https://github.com/user-attachments/assets/fluxo-adocao-demo.mp4
+**Fluxo Completo de Adoção** – sequência do cadastro até a conclusão da adoção.
 
-<video src="Docs/gifs/browser/fluxo de adoçao.mp4" width="600" controls></video>
+<img src="Docs/gifs/browser/fluxo%20de%20ado%C3%A7ao.gif" width="700" alt="Fluxo de adoção no navegador" />
 
 ---
 
 ### API REST (Postman)
 
-#### Inserir Pet
-https://github.com/user-attachments/assets/inserir-pet-api-demo.mp4
+**Inserir Pet** – request POST enviando o payload completo.
 
-<video src="Docs/gifs/postman/Inseriri pet.mp4" width="600" controls></video>
+<img src="Docs/gifs/postman/Inseriri%20pet.gif" width="700" alt="Inserção de pet via Postman" />
 
-#### Listar Todos os Pets
-https://github.com/user-attachments/assets/listar-pets-api-demo.mp4
+**Listar Todos os Pets** – visão geral dos registros salvos.
 
-<video src="Docs/gifs/postman/Listar pets.mp4" width="600" controls></video>
+<img src="Docs/gifs/postman/Listar%20pets.gif" width="700" alt="Listagem de pets via Postman" />
 
-#### Listar Pet por ID
-https://github.com/user-attachments/assets/listar-pet-id-api-demo.mp4
+**Listar Pet por ID** – busca pontual validando os filtros.
 
-<video src="Docs/gifs/postman/Listar pet por id.mp4" width="600" controls></video>
+<img src="Docs/gifs/postman/Listar%20pet%20por%20id.gif" width="700" alt="Listagem de pet por ID via Postman" />
 
-#### Atualizar Pet
-https://github.com/user-attachments/assets/atualizar-pet-api-demo.mp4
+**Atualizar Pet** – envio do PUT com apenas os campos modificados.
 
-<video src="Docs/gifs/postman/Atualizar.mp4" width="600" controls></video>
+<img src="Docs/gifs/postman/Atualizar.gif" width="700" alt="Atualização de pet via Postman" />
 
-#### Deletar Pet
-https://github.com/user-attachments/assets/deletar-pet-api-demo.mp4
+**Deletar Pet** – exclusão confirmada no endpoint DELETE.
 
-<video src="Docs/gifs/postman/Delete.mp4" width="600" controls></video>
+<img src="Docs/gifs/postman/Delete.gif" width="700" alt="Remoção de pet via Postman" />
 
 ## 🛠️ Endpoints da API
 
@@ -200,7 +191,7 @@ ProjeoPets/
 │   │   │   ├── config/       # Configurações (CORS, etc)
 │   │   │   ├── controller/   # Controllers REST
 │   │   │   ├── DTORequests/  # DTOs de requisição
-│   │   │   ├── model/        # Entidades JPA
+│   │   │   ├── model/        # Modelos utilizados pelo JDBC
 │   │   │   ├── repository/   # Repositórios
 │   │   │   ├── service/      # Lógica de negócio
 │   │   │   └── Util/         # Utilitários
@@ -229,4 +220,3 @@ Para dúvidas ou sugestões, entre em contato através do GitHub.
 ---
 
 ⭐ Desenvolvido com dedicação para facilitar o trabalho de ONGs e instituições de proteção animal.
-
