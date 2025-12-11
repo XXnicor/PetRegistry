@@ -1,3 +1,5 @@
+
+[README.md](https://github.com/user-attachments/files/24110449/README.md)
 # 🐾 PetRegistry - Sistema de Gerenciamento de Pets
 
 Sistema completo de gerenciamento para ONGs de adoção de animais, desenvolvido com Spring Boot e interface web interativa.
